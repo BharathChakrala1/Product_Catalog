@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Buyer Home - eCommerce</title>
+    <link rel="stylesheet" th:href="@{/css/buyer-home.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
+        }
+
+        .nav-bar {
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .site-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e2e2e;
+        }
+
+        .user-welcome {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #007185;
+            font-weight: 500;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: scale(1.02);
+        }
+
+        .product-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .product-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .category {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 6px;
+        }
+
+        .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff3e6c;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            background-color: #2c4152;
+            color: #fff;
+        }
+
+        .wish-btn {
+            background-color: #ff3e6c;
+        }
+
+        .wish-btn:hover {
+            background-color: #e02e5a;
+        }
+        .product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+    </style>
+</head>
+<body>
+<nav class="nav-bar">
+    <span class="site-title">eCommerce</span>
+    <span class="user-welcome">Welcome, <b th:text="${username}"></b>!</span>
+    <div>
+        <a th:href="@{/cart}" class="nav-link">Cart</a>
+        <a th:href="@{/wishlist}" class="nav-link">Wishlist</a>
+        <a th:href="@{/logout}" class="nav-link">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>All Products</h2>
+    <div class="product-list">
+        <div th:each="product : ${products}" class="product-card">
+            <!-- 🖼 Product Image -->
+            <div class="product-img-container">
+                <img th:src="${product.imageUrl != null} ? ${product.imageUrl} : @{/images/default-product.png}"
+                     alt="Product Image" class="product-img"/>
+            </div>
+
+            <!-- 📦 Product Info -->
+            <div class="product-info">
+                <h3 th:text="${product.name}">Product Name</h3>
+                <p th:text="${product.description}">Description</p>
+                <div class="category" th:text="'Category: ' + ${product.category.name}">Category</div>
+                <div class="price" th:text="'₹' + ${product.price}"></div>
+            </div>
+
+            <!-- 🎯 Buttons -->
+            <div class="product-actions">
+                <form th:action="@{|/cart/add/${product.id}|}" method="post">
+                    <button type="submit" class="action-btn">Add to Cart</button>
+                </form>
+                <form th:action="@{|/wishlist/add/${product.id}|}" method="post">
+                    <button type="submit" class="action-btn wish-btn">Add to Wishlist</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

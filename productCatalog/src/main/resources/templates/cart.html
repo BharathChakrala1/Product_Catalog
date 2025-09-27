@@ -1,0 +1,162 @@
+ <div th:if="${cartItems != null and !#lists.isEmpty(cartItems)}" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .amazon-cart-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .cart-title {
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 2px solid #f0c14b;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-table th,
+        .cart-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e6e6e6;
+            text-align: left;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .product-info img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 1px solid #ccc;
+        }
+
+        .product-info span {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .quantity-form {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .quantity-form input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .update-btn,
+        .remove-btn {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .remove-btn:hover {
+            background-color: #ffd7d7;
+        }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            font-size: 18px;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #B12704;
+        }
+
+        .checkout-btn {
+            background-color: #f0c14b;
+            border-color: #a88734 #9c7e31 #846a29;
+            color: #111;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+        }
+
+        .checkout-btn:hover {
+            background-color: #ddb347;
+        }
+    </style>
+
+    <div class="amazon-cart-container">
+        <div class="cart-title">Shopping Cart</div>
+
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Item</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td>
+                    <div class="product-info">
+                        <img th:src="${item.product.imageUrl != null} ? ${item.product.imageUrl} : @{/images/default-product.png}" alt="Product"/>
+                        <span th:text="${item.product.name}"></span>
+                    </div>
+                </td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(item.product.price, 2, 2)}"></td>
+                <td>
+                    <form th:action="@{|/cart/update/${item.id}|}" method="post" class="quantity-form">
+                        <input type="number" name="quantity" th:value="${item.quantity}" min="1" required/>
+                        <button type="submit" class="update-btn">Update</button>
+                    </form>
+                </td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(item.product.price * item.quantity, 2, 2)}"></td>
+                <td>
+                    <form th:action="@{|/cart/remove/${item.id}|}" method="post">
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form th:action="@{/cart/checkout}" method="post">
+            <div class="cart-summary">
+                <div>
+                    <span>Total:</span>
+                    <span class="summary-value" th:text="'₹' + ${#numbers.formatDecimal(total, 2, 2)}"></span>
+                </div>
+                <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </form>
+    </div>
+</div>

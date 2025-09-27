@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - eCommerce</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 40px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 350px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px 26px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 6px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            color: #111;
+            margin-bottom: 20px;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #a6a6a6;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .role-label {
+            font-size: 13px;
+            margin-bottom: 5px;
+            display: block;
+            color: #111;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #f0c14b;
+            border: 1px solid #a88734;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .auth-btn:hover {
+            background-color: #e2b33c;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #ddd;
+            margin: 20px 0;
+        }
+
+        .login-link {
+            font-size: 13px;
+            color: #0066c0;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .err-msg {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="logo">eCommerce</div>
+    <h2 class="auth-title">Create a New Account</h2>
+    <form th:action="@{/register}" method="post" th:object="${user}">
+        <div class="input-group">
+            <input type="text" th:field="*{username}" placeholder="Username" required />
+        </div>
+        <div class="input-group">
+            <input type="email" th:field="*{email}" placeholder="Email" required />
+        </div>
+        <div class="input-group">
+            <input type="password" th:field="*{password}" placeholder="Password" required />
+        </div>
+        <div class="input-group">
+            <label class="role-label">Register as:</label>
+            <select name="role" required>
+                <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+            </select>
+        </div>
+        <button type="submit" class="auth-btn create-btn">Sign Up</button>
+    </form>
+    <div class="divider"></div>
+    <a class="login-link" th:href="@{/login}">Already have an account? Log in</a>
+    <div th:if="${error}" class="err-msg" th:text="${error}"></div>
+</div>
+</body>
+</html>
